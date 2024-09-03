@@ -95,10 +95,14 @@ GRANT ALL PRIVILEGES ON DATABASE programmers TO dbuser;
 * <> Code버튼을 누른 후 HTTPS를 눌러 Download ZIP을 누릅니다.
 * 해당 프로젝트를 실행할 폴더를 생성합니다.
 
-#### (2) 장고 다운로드
+#### (2) 필요 패키지 다운로드
 
 ```bash
 $ pip install django
+$ pip install djangorestframework
+$ pip install drf-yasg
+$ pip install psycopg2-binary
+$ pip install PyJWT
 ```
 
 #### (3) 가상환경 설정
@@ -116,7 +120,8 @@ $ source venv/Scripts/activate
 데이터베이스를 설정하기 위해 마이그레이션을 적용합니다.
 
 ```bash
-$ python manage.py migrate
+$ python manage.py makemigrations myapp
+$ python manage.py migrate myapp
 ```
 
 #### (5) Django 개발 서버 실행
