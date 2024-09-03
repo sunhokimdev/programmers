@@ -120,4 +120,4 @@ erDiagram
     EXAM ||--o{ SCHEDULE: reference
 ```
 ### 주의사항
-유저 API는 유저(type=N)으로 만든 토큰으로 실행해야 합니다, 반대로 어드민 API는 유저(type=A)로 만든 토큰으로 실행해야 합니다.
+유저 API는 유저(type=N)으로 만든 토큰으로 실행해야 합니다, 반대로 어드민 API는 유저(type=A)로 만든 토큰으로 실행해야 합니다. common는 토큰없이 실행할 수 있습니다.
