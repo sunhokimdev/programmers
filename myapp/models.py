@@ -20,7 +20,7 @@ class Member(models.Model):
         db_table = "member"
 
 
-class Course(models.Model):
+class Exam(models.Model):
     name = models.CharField(max_length=50)
     language = models.TextField(
         verbose_name="테스트에 응시할 수 있는 언어 종류(구분은 ,로 구분)"
@@ -30,7 +30,7 @@ class Course(models.Model):
     max_number = models.IntegerField(
         verbose_name="최대 응시 인원(= 최대 예약 확정 인원)"
     )
-    member_id = models.ForeignKey(
+    member = models.ForeignKey(
         Member,
         on_delete=models.CASCADE,
         null=False,
@@ -38,7 +38,7 @@ class Course(models.Model):
     )
 
     class Meta:
-        db_table = "course"
+        db_table = "exam"
 
 
 class Schedule(models.Model):
@@ -53,11 +53,11 @@ class Schedule(models.Model):
         verbose_name="예약 상태(C: 확정, W: 대기 상태)",
     )
     language = models.CharField(max_length=20, verbose_name="응시할 언어")
-    member_id = models.ForeignKey(
+    member = models.ForeignKey(
         Member, on_delete=models.CASCADE, null=False, verbose_name="응시할 유저 아이디"
     )
-    course_id = models.ForeignKey(
-        Course, on_delete=models.CASCADE, null=False, verbose_name="테스트 고유 번호"
+    exam = models.ForeignKey(
+        Exam, on_delete=models.CASCADE, null=False, verbose_name="테스트 고유 번호"
     )
 
     class Meta:

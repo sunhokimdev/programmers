@@ -10,7 +10,7 @@ from rest_framework.decorators import (
 )
 from rest_framework.permissions import AllowAny
 
-from myapp.models import Course
+from myapp.models import Exam
 from myapp.serializer import FindCourseListSerializer
 from myapp.utils import (
     success_response,
@@ -20,20 +20,20 @@ from myapp.utils import (
 
 @swagger_auto_schema(
     methods=["get"],
-    operation_summary="테스트 조회 API",
+    operation_summary="시험 조회 API",
     tags=["common"],
     security=[],
     manual_parameters=[
         openapi.Parameter(
             "limit",
             openapi.IN_QUERY,
-            description="가져올 테스트의 갯수",
+            description="가져올 시험의 갯수",
             type=openapi.TYPE_INTEGER,
         ),
         openapi.Parameter(
             "offset",
             openapi.IN_QUERY,
-            description="가져올 테스트의 데이터의 시작 위치",
+            description="가져올 시험의 데이터의 시작 위치",
             type=openapi.TYPE_INTEGER,
         ),
     ],
@@ -78,7 +78,7 @@ def find_course_list(request):
     now = timezone.now()
     three_days_after_now = now + timedelta(days=3)
 
-    course_list = Course.objects.filter(test_start_datetime__gte=three_days_after_now)
+    course_list = Exam.objects.filter(test_start_datetime__gte=three_days_after_now)
 
     limit = int(request.GET.get("limit", 10))
     offset = int(request.GET.get("offset", 0))

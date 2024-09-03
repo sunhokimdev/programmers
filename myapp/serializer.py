@@ -1,14 +1,14 @@
-from .models import Schedule, Member, Course
-from rest_framework import serializers, viewsets
+from .models import Schedule, Member, Exam
+from rest_framework import serializers
 
 
 class SaveScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Schedule
-        fields = ["language", "course_id"]
+        fields = ["language", "exam"]
 
     def create(self, validated_data):
-        validated_data["member_id"] = self.context
+        validated_data["member"] = self.context
         return super().create(validated_data)
 
 
@@ -20,7 +20,7 @@ class SaveMemberSerializer(serializers.ModelSerializer):
 
 class SaveCourseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Course
+        model = Exam
         fields = [
             "name",
             "language",
@@ -30,18 +30,18 @@ class SaveCourseSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        validated_data["member_id"] = self.context
+        validated_data["member"] = self.context
         return super().create(validated_data)
 
 
 class FindCourseListSerializer(serializers.ModelSerializer):
     current_number = serializers.SerializerMethodField()
-    course_id = serializers.IntegerField(source="id", help_text="응시할 테스트 아이디")
+    exam_id = serializers.IntegerField(source="id", help_text="응시할 테스트 아이디")
 
     class Meta:
-        model = Course
+        model = Exam
         fields = [
-            "course_id",
+            "exam_id",
             "name",
             "language",
             "test_start_datetime",
@@ -52,23 +52,32 @@ class FindCourseListSerializer(serializers.ModelSerializer):
 
     @classmethod
     def get_current_number(cls, obj):
-        return Schedule.objects.filter(course_id=obj, status="C").count()
+        return Schedule.objects.filter(exam_id=obj, status="C").count()
 
 
-class ModifyScheduleSerializer(serializers.ModelSerializer):
+class ModifyAdminScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Schedule
-        fields = ["language", "status"]
+        fields = ["status", "language"]
 
 
-class FindScheduleSerializer(serializers.ModelSerializer):
-    test_start_datetime = serializers.DateTimeField(
-        source="schedule_id.test_start_datetime"
+class ModifyMemberScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Schedule
+        exclude = ["created_datetime", "status", "member", "exam"]
+
+
+class FindMemberScheduleSerializer(serializers.ModelSerializer):
+    schedule_id = serializers.IntegerField(
+        source="exam.id", help_text="응시할 테스트 아이디"
     )
-    language = serializers.CharField(source="schedule_id.language")
+    test_start_datetime = serializers.DateTimeField(source="exam.test_start_datetime")
+
+    created_datetime = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S")
+    status = serializers.CharField()
+    language = serializers.CharField(source="exam.language")
     test_language = serializers.CharField(source="language")
-    schedule_id = serializers.IntegerField(source="id")
-    max_number = serializers.IntegerField(source="schedule_id.max_number")
+    max_number = serializers.IntegerField(source="exam.max_number")
 
     class Meta:
         model = Schedule
@@ -84,14 +93,12 @@ class FindScheduleSerializer(serializers.ModelSerializer):
 
 
 class FindAdminSchedulesSerializer(serializers.ModelSerializer):
-    user_name = serializers.CharField(source="member_id.name")
-    user_email = serializers.CharField(source="member_id.email")
-    test_name = serializers.CharField(source="schedule_id.name")
+    user_name = serializers.CharField(source="member.name")
+    user_email = serializers.CharField(source="member.email")
+    test_name = serializers.CharField(source="exam.name")
     test_language = serializers.CharField(source="language")
     schedule_id = serializers.IntegerField(source="id")
-    test_start_datetime = serializers.DateTimeField(
-        source="schedule.test_start_datetime"
-    )
+    test_start_datetime = serializers.DateTimeField(source="exam.test_start_datetime")
 
     class Meta:
         model = Schedule

@@ -8,7 +8,7 @@ from rest_framework.decorators import (
 )
 from rest_framework.permissions import AllowAny
 
-from myapp.authentication import JWTAuthentication
+from myapp.authentication import create_jwt
 from myapp.errors import ErrorCodes
 from myapp.serializer import SaveMemberSerializer
 from myapp.utils import (
@@ -42,9 +42,8 @@ def save_member(request):
     serializer = SaveMemberSerializer(data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
-        auth = JWTAuthentication()
-        token = auth.create_jwt(serializer.data)
+        token = create_jwt(serializer.data)
         data = {"access_token": token}
 
         return success_response(data=data)
-    return error_response(ErrorCodes.INVALID_DATA)
+    return error_response(ErrorCodes.UNKNOWN)
