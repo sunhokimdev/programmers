@@ -90,13 +90,18 @@ GRANT ALL PRIVILEGES ON DATABASE programmers TO dbuser;
 
 ### 프로젝트 환경 설정
 
-#### (1) git clone
+#### (1) git downloads
+
+* <> Code버튼을 누른 후 HTTPS를 눌러 Download ZIP을 누릅니다.
+* 해당 프로젝트를 실행할 폴더를 생성합니다.
+
+#### (2) 장고 다운로드
 
 ```bash
-git clone git@github.com:sunhokimdev/programmers.git
+$ pip install django
 ```
 
-#### (2) 가상환경 설정
+#### (3) 가상환경 설정
 
 프로젝트 디렉터리로 이동한 후 가상환경을 설정합니다.
 
@@ -106,7 +111,7 @@ $ python -m venv venv
 $ source venv/Scripts/activate
 ```
 
-#### (3) 데이터 베이스 마이그레이션
+#### (4) 데이터 베이스 마이그레이션
 
 데이터베이스를 설정하기 위해 마이그레이션을 적용합니다.
 
@@ -114,15 +119,11 @@ $ source venv/Scripts/activate
 $ python manage.py migrate
 ```
 
-#### (4) Django 개발 서버 실행
+#### (5) Django 개발 서버 실행
 
 ```bash
 $ python manage.py runserver
 ```
-
-
-
-
 
 ## ERD
 
