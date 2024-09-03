@@ -54,9 +54,11 @@
 * DB: PostgreSQL 14v
 * swagger 접속 링크: http://localhost:8000/swagger/
 
-## DB 환경설정
+## 프로젝트 환경 설정
 
-### (1) PostgreSQL에 접속
+### DB 환경설정
+
+#### (1) PostgreSQL에 접속
 
 ```bash
 $ psql -U postgres
@@ -64,26 +66,58 @@ $ psql -U postgres
 
 * `postgres`는 PostgreSQL의 슈퍼유저입니다. 비밀번호 입력 시 PostgreSQL에 접속할 수 있습니다.
 
-### (2) 데이터 베이스 및 사용자 생성
+#### (2) 데이터 베이스 및 사용자 생성
 
 만약 다른 데이터베이스 및 사용자를 사용하고 싶다면 django프로젝트 -> setting.py -> `DATABASE` 옵션을 변경해야 합니다.
 
-#### 데이터 베이스 생성
+**데이터베이스 생성**
 
 ```postgresql
 CREATE DATABASE programmers
 ```
 
-#### 사용자 생성
+**사용자 생성**
 
 ```postgresql
 CREATE USER dbuser WITH PASSWORD 'dbuser'
 ```
 
-### (3) 권한 부여
+**권한 부여**
 
 ```postgresql
 GRANT ALL PRIVILEGES ON DATABASE programmers TO dbuser;
+```
+
+### 프로젝트 환경 설정
+
+#### (1) git clone
+
+```bash
+git clone git@github.com:sunhokimdev/programmers.git
+```
+
+#### (2) 가상환경 설정
+
+프로젝트 디렉터리로 이동한 후 가상환경을 설정합니다.
+
+```bash
+$ cd your-repo
+$ python -m venv venv
+$ source venv/Scripts/activate
+```
+
+#### (3) 데이터 베이스 마이그레이션
+
+데이터베이스를 설정하기 위해 마이그레이션을 적용합니다.
+
+```bash
+$ python manage.py migrate
+```
+
+#### (4) Django 개발 서버 실행
+
+```bash
+$ python manage.py runserver
 ```
 
 
